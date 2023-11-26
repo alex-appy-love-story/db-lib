@@ -6,9 +6,11 @@ import (
 )
 
 type Token struct {
-	// ID, CreatedAt, UpdatedAt, DeletedAt.
+	// ID
+	// CreatedAt
+	// UpdatedAt
+	// DeletedAt
 	gorm.Model
 
-	// Cost.
-	Cost decimal.Decimal `json:"balance" sql:"type:decimal(10,2);"`
+	Cost decimal.Decimal `json:"cost" sql:"type:decimal(10,2);"`
 }
