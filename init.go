@@ -3,48 +3,24 @@
 package init
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/alex-appy-love-story/db-lib/models/inventory"
-	"github.com/alex-appy-love-story/db-lib/models/order"
-	"github.com/alex-appy-love-story/db-lib/models/token"
-	"github.com/alex-appy-love-story/db-lib/models/user"
 	"gorm.io/gorm"
 )
 
-func InitTables(db *gorm.DB) {
+func InitTables(db *gorm.DB, table interface{}) error {
 	if db == nil {
-		log.Panic("Database is invalid.")
-		return
+		return fmt.Errorf("Database is invalid.")
 	}
 
 	migrator := db.Migrator()
 
-	if !migrator.HasTable(&user.User{}) {
-		err := db.AutoMigrate(&user.User{})
+	if !migrator.HasTable(table) {
+		err := db.AutoMigrate(table)
 		if err != nil {
-			log.Panic("Failed to migrate User table", err)
+			return err
 		}
 	}
 
-	if !migrator.HasTable(&token.Token{}) {
-		err := db.AutoMigrate(&token.Token{})
-		if err != nil {
-			log.Panic("Failed to migrate Token table", err)
-		}
-	}
-
-	if !migrator.HasTable(&order.Order{}) {
-		err := db.AutoMigrate(&order.Order{})
-		if err != nil {
-			log.Panic("Failed to migrate Order table", err)
-		}
-	}
-
-	if !migrator.HasTable(&inventory.Inventory{}) {
-		err := db.AutoMigrate(&inventory.Inventory{})
-		if err != nil {
-			log.Panic("Failed to migrate Inventory table", err)
-		}
-	}
+	return nil
 }

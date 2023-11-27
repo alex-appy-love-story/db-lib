@@ -5,11 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserInfo struct {
-	Username string          `json:"username"`
-	Balance  decimal.Decimal `json:"balance" sql:"type:decimal(10,2);"`
-}
-
 type User struct {
 	// ID
 	// CreatedAt
@@ -18,6 +13,5 @@ type User struct {
 	gorm.Model
 
 	// Username
-	// Balance
-	UserInfo
+	Balance decimal.Decimal `json:"balance" sql:"type:decimal(10,2);"`
 }

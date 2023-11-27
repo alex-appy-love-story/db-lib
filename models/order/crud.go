@@ -4,7 +4,36 @@ import "gorm.io/gorm"
 
 func CreateOrder(db *gorm.DB, order *OrderInfo) (*Order, error) {
 	newOrder := &Order{
-		OrderInfo: *order,
+		OrderInfo:   *order,
+		OrderStatus: PENDING,
 	}
 	return newOrder, db.Create(newOrder).Error
+}
+
+func GetOrder(db *gorm.DB, orderID uint) (*Order, error) {
+	ord := &Order{}
+	err := db.First(ord, orderID).Error
+	return ord, err
+}
+
+func SetOrderStatus(db *gorm.DB, orderID uint, orderStatus OrderStatus) (*Order, error) {
+	var ord *Order = nil
+	var err error = nil
+
+	err = db.Transaction(func(tx *gorm.DB) error {
+
+		if ord, err = GetOrder(tx, orderID); err != nil {
+			return err
+		}
+
+		ord.OrderStatus = orderStatus
+
+		if err = tx.Save(ord).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return ord, err
 }
