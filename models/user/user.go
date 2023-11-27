@@ -12,6 +12,6 @@ type User struct {
 	// DeletedAt
 	gorm.Model
 
-	// Username
-	Balance decimal.Decimal `json:"balance" sql:"type:decimal(10,2);"`
+	Username string          `json:"username"`
+	Balance  decimal.Decimal `json:"balance" sql:"type:decimal(10,2);"`
 }
