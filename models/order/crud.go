@@ -1,6 +1,10 @@
 package order
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 func CreateOrder(db *gorm.DB, order *OrderInfo) (*Order, error) {
 	newOrder := &Order{
@@ -24,6 +28,33 @@ func SetOrderStatus(db *gorm.DB, orderID uint, orderStatus OrderStatus) (*Order,
 
 		if ord, err = GetOrder(tx, orderID); err != nil {
 			return err
+		}
+
+		ord.OrderStatus = orderStatus
+
+		if err = tx.Save(ord).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return ord, err
+}
+
+// Only set if a value isn't set yet.
+func SetOrderStatusFail(db *gorm.DB, orderID uint, orderStatus OrderStatus) (*Order, error) {
+	var ord *Order = nil
+	var err error = nil
+
+	err = db.Transaction(func(tx *gorm.DB) error {
+
+		if ord, err = GetOrder(tx, orderID); err != nil {
+			return err
+		}
+
+		if ord.OrderStatus != PENDING {
+			return fmt.Errorf("aborted, value already set")
 		}
 
 		ord.OrderStatus = orderStatus
