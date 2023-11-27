@@ -20,3 +20,25 @@ func GetUser(db *gorm.DB, ID uint) (*User, error) {
 	err := db.First(usr, ID).Error
 	return usr, err
 }
+
+func UpdateUserBalance(db *gorm.DB, ID uint, value decimal.Decimal) (*User, error) {
+	var ret *User = nil
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+
+		var err error
+		if ret, err = GetUser(tx, ID); err != nil {
+			return err
+		}
+
+		ret.Balance = value
+
+		if err := tx.Save(&ret).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return ret, err
+}
