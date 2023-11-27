@@ -37,3 +37,7 @@ func SetOrderStatus(db *gorm.DB, orderID uint, orderStatus OrderStatus) (*Order,
 
 	return ord, err
 }
+
+func DeleteOrder(db *gorm.DB, orderID uint) error {
+	return db.Delete(&Order{}, orderID).Error
+}
