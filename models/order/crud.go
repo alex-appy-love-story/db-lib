@@ -72,3 +72,9 @@ func SetOrderStatusFail(db *gorm.DB, orderID uint, orderStatus OrderStatus) (*Or
 func DeleteOrder(db *gorm.DB, orderID uint) error {
 	return db.Delete(&Order{}, orderID).Error
 }
+
+func GetLastOrder(db *gorm.DB) (*Order, error) {
+	ord := &Order{}
+	err := db.Last(ord).Error
+	return ord, err
+}
