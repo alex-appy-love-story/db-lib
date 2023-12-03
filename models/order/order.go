@@ -9,11 +9,13 @@ import (
 type OrderStatus string
 
 const (
-	PENDING                   OrderStatus = "PENDING"
-	SUCCESS                   OrderStatus = "SUCCESS"
-	FAIL                      OrderStatus = "FAIL"
-	PAYMENT_FAIL_INSUFFICIENT OrderStatus = "PAYMENT_FAIL_INSUFFICIENT"
-	INVENTORY_FAIL_STOCK      OrderStatus = "INVENTORY_FAIL_STOCK"
+	PENDING                      OrderStatus = "PENDING"
+	SUCCESS                      OrderStatus = "SUCCESS"
+	FAIL                         OrderStatus = "FAIL"
+	PAYMENT_FAIL_INSUFFICIENT    OrderStatus = "PAYMENT_FAIL_INSUFFICIENT"
+	PAYMENT_FAIL_TOKEN_NOT_FOUND OrderStatus = "PAYMENT_FAIL_TOKEN_NOT_FOUND"
+	INVENTORY_FAIL_STOCK         OrderStatus = "INVENTORY_FAIL_STOCK"
+	FORCED_FAIL                  OrderStatus = "FORCED_FAIL"
 )
 
 func (self *OrderStatus) Scan(value interface{}) error {
@@ -43,5 +45,5 @@ type Order struct {
 	// Amount
 	OrderInfo
 
-	OrderStatus OrderStatus `json:"order_status" sql:"type:ENUM('PENDING', 'SUCCESS', 'FAIL', 'PAYMENT_FAIL_INSUFFICIENT', 'INVENTORY_FAIL_STOCK')" gorm:"column:order_status"`
+	OrderStatus OrderStatus `json:"order_status" sql:"type:ENUM('PENDING', 'SUCCESS', 'FAIL', 'PAYMENT_FAIL_INSUFFICIENT', 'INVENTORY_FAIL_STOCK', 'FORCED_FAIL', 'PAYMENT_FAIL_TOKEN_NOT_FOUND')" gorm:"column:order_status"`
 }
