@@ -16,6 +16,7 @@ const (
 	PAYMENT_FAIL_TOKEN_NOT_FOUND OrderStatus = "PAYMENT_FAIL_TOKEN_NOT_FOUND"
 	INVENTORY_FAIL_STOCK         OrderStatus = "INVENTORY_FAIL_STOCK"
 	FORCED_FAIL                  OrderStatus = "FORCED_FAIL"
+    DEFAULT_RESPONSE             OrderStatus = "DEFAULT_RESPONSE"
 )
 
 func (self *OrderStatus) Scan(value interface{}) error {
